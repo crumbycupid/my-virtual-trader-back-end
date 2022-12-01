@@ -84,7 +84,11 @@ app.get('/user', getUser);
 
 async function getUser(req, res, next){
   try {
-    let user = await User.find
+    let email = 'craig@gmail.com'
+
+    //{ "name.last": "Hopper" }
+    let userId = req.params.id;
+    let user = await User.find({"email":"craig@gmail.com"});
     res.status(200).send(user);
   } catch (err){
     next(err);
@@ -104,6 +108,9 @@ async function postUser(req, res, next){
 
 app.put('/user/:id', updateStock);
 
+//this will be used to add a stock and delete a stock
+// the frontend handles whats in the portfolio
+
 async function updateStock(req, res, next){
   try{
     let id = req.params.id; 
@@ -114,6 +121,22 @@ async function updateStock(req, res, next){
     next(err);
   }
 };
+
+
+
+app.delete('/user/:id', deleteStock);
+
+async function deleteStock(req, res, next) {
+  try {
+    console.log(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
+    res.send('user deleted');
+  } catch(err) {
+    next(err);
+  }
+}
+
+
 
 class Chart {
   constructor(chartObject, formattedTime) {
