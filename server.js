@@ -18,7 +18,7 @@ const cors = require('cors');
 //   console.log('Mongoose is connected');
 // });
 
-// // connect Mongoose to our MongoDB
+// // // connect Mongoose to our MongoDB
 // mongoose.connect(process.env.DB_URL);
 
 
@@ -41,18 +41,52 @@ const PORT = process.env.PORT || 3002;
 
 app.get('/stocks', getStocks);
 
-async function getStocks(req, res, next){
-  try{
+async function getStocks(req, res, next) {
+  try {
+    let d = new Date();
+    let day = d.getDate();
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    let year = d.getFullYear();
+    let month = d.getMonth() +1;
+    let formattedTime = `${year}-${month}-${day}`
+    console.log(formattedTime);
+    const { chosenTicker } = req.query;
+    let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/${formattedTime}?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
+    console.log(url);
+    let results = await axios.get(url);
+    let chartGroomed =  new Chart (results.data, formattedTime);
+    console.log(chartGroomed);
+    res.send(results.data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+app.get('/crypto', getCrypto);
+
+async function getCrypto(req, res, next) {
+  try {
     let timeNow = Date.now();
-    const {chosenTicker} = req.query;
+    const { chosenTicker } = req.query;
     let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/2022-12-01?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
     console.log(url);
     let results = await axios.get(url);
     res.send(results.data);
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 };
+
+class Chart {
+  constructor(chartObject, formattedTime) {
+    this.ticker = chartObject.ticker;
+    this.resultsCount = chartObject.resultsCount;
+    this.closePrice = chartObject.results.map(price => price.c);
+    this.formattedTime = formattedTime;
+  }
+}
 
 app.get('*', (request, response) => {
   response.status(404).send('Not availabe');
