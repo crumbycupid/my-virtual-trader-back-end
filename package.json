@@ -1,0 +1,27 @@
+{
+  "name": "my-virtual-trader-back-end",
+  "version": "1.0.0",
+  "description": "my virtual trader backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crumbycupid/my-virtual-trader-back-end.git"
+  },
+  "author": "Cody De La Torre, Devon Terry, Todd Wolden, Tracy Oakley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crumbycupid/my-virtual-trader-back-end/issues"
+  },
+  "homepage": "https://github.com/crumbycupid/my-virtual-trader-back-end#readme",
+  "dependencies": {
+    "axios": "^1.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.5",
+    "nodemon": "^2.0.20"
+  }
+}
