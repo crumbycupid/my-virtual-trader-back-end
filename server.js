@@ -5,21 +5,22 @@ const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
 
+
 // // bring in mongoose
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 // // must bring in a schema is we want to interact with that model
-// // const Cat = require('./models/cat.js');
+const User = require('./models/User.js');
 
 // // add validation to confirm we are wired up to our mongo DB
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function () {
-//   console.log('Mongoose is connected');
-// });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+console.log('Mongoose is connected');
+});
 
 // // // connect Mongoose to our MongoDB
-// mongoose.connect(process.env.DB_URL);
+mongoose.connect(process.env.DB_URL);
 
 
 // USE
@@ -75,6 +76,41 @@ async function getCrypto(req, res, next) {
     let results = await axios.get(url);
     res.send(results.data);
   } catch (err) {
+    next(err);
+  }
+};
+
+app.get('/user', getUser);
+
+async function getUser(req, res, next){
+  try {
+    let user = await User.find
+    res.status(200).send(user);
+  } catch (err){
+    next(err);
+  }
+};
+
+app.post('/user', postUser);
+
+async function postUser(req, res, next){
+  try{
+    let user = await User.create(req.body);
+    res.send(user);
+  } catch (err){
+    next(err);
+  }
+};
+
+app.put('/user/:id', updateStock);
+
+async function updateStock(req, res, next){
+  try{
+    let id = req.params.id; 
+    let updatedUserData = req.body;
+    let updatedUser = await User.findByIdAndUpdate(id, updatedUserData, {new: true, overwrites: true});
+    res.status(200).send(updatedUser);
+  } catch (err){
     next(err);
   }
 };
