@@ -40,11 +40,11 @@ app.get('/stocks', getStocks);
 
 async function getStocks(req, res) {
 
-  verifyUser(req, async (err, user) => {
+  // verifyUser(req, async (err, user) => {
     
-    if (err) {
-      res.send('Invalid Token');
-    } else {
+  //   if (err) {
+  //     res.send('Invalid Token');
+  //   } else {
 
       try {
         let d = new Date();
@@ -67,8 +67,8 @@ async function getStocks(req, res) {
         res.status(500).send('There is a Server Error, Please Try Again');
       }
     }
-  });
-}
+//   });
+// }
 app.get('/crypto', getCrypto);
 
 async function getCrypto(req, res, next) {
