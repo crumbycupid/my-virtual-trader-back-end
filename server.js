@@ -90,11 +90,12 @@ app.get('/user', getUser);
 
 async function getUser(req, res, next) {
   try {
-    let email = 'craig@gmail.com'
-
+    let email = req.query.email;
+    console.log(email);
     //{ "name.last": "Hopper" }
-    let userId = req.params.id;
-    let user = await User.find({ "email": "craig@gmail.com" });
+    // let userId = req.params.id;
+    let user = await User.find({ "email": email });
+    console.log(user);
     res.status(200).send(user);
   } catch (err) {
     next(err);
