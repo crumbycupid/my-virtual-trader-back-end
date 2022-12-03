@@ -8,6 +8,7 @@ const userSchema = new Schema({
   name: {type: String, required: true},
   email: {type: String, required: true},
   portfolio: {type: Array, required: true},
+  balance: {type: Number, required: true}
 });
 
 //Portfolio will have list of objects. In each object there will be a ticker, date, how much of a stock was bought and what price it was bought at.

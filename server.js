@@ -34,8 +34,6 @@ app.use(express.json());
 const PORT = process.env.PORT || 3002;
 
 //Routes
-//https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD
-
 ///v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}
 
 app.get('/stocks', getStocks);
@@ -131,9 +129,9 @@ async function updateStock(req, res, next) {
 
 
 
-app.delete('/user/:id', deleteStock);
+app.delete('/user/:id', deleteUser);
 
-async function deleteStock(req, res, next) {
+async function deleteUser(req, res, next) {
   try {
     console.log(req.params.id);
     await User.findByIdAndDelete(req.params.id);
