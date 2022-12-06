@@ -50,9 +50,17 @@ async function getStocks(req, res) {
     let year = d.getFullYear();
     let month = d.getMonth() + 1;
     let formattedTime = `${year}-${month}-${day}`
+
+    let daysPrior = new Date();
+    daysPrior = parseInt(daysPrior.getDate()) - 4;
+    if (daysPrior < 10) {
+      daysPrior = `0${daysPrior}`;
+    }
+    let formatteddaysPrior = `${year}-${month}-${daysPrior}`
+
     
     const { chosenTicker } = req.query;
-    let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-12-02/${formattedTime}?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
+    let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/${formatteddaysPrior}/${formattedTime}?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
     
     let results = await axios.get(url);
     let chartGroomed = new Chart(results.data, formattedTime);
