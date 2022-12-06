@@ -7,6 +7,7 @@ const cors = require('cors');
 const verifyUser = require('./auth.js');
 const mongoose = require('mongoose');
 
+
 // // must bring in a schema is we want to interact with that model
 const User = require('./models/User.js');
 
@@ -39,8 +40,6 @@ const PORT = process.env.PORT || 3002;
 app.get('/stocks', getStocks);
 
 async function getStocks(req, res) {
-
-
 
   try {
     let d = new Date();
@@ -158,7 +157,7 @@ class Chart {
 }
 
 app.get('*', (request, response) => {
-  response.status(404).send('Not availabe');
+  response.status(404).send('Not available');
 });
 
 
