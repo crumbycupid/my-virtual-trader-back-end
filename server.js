@@ -40,65 +40,63 @@ app.get('/stocks', getStocks);
 
 async function getStocks(req, res) {
 
-  // verifyUser(req, async (err, user) => {
-    
-  //   if (err) {
-  //     res.send('Invalid Token');
-  //   } else {
 
-      try {
-        let d = new Date();
-        let day = d.getDate();
-        if (day < 10) {
-          day = `0${day}`;
-        }
-        let year = d.getFullYear();
-        let month = d.getMonth() + 1;
-        let formattedTime = `${year}-${month}-${day}`
-        console.log(formattedTime);
-        const { chosenTicker } = req.query;
-        let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/${formattedTime}?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
-        console.log(url);
-        let results = await axios.get(url);
-        let chartGroomed = new Chart(results.data, formattedTime);
-        console.log(chartGroomed);
-        res.send(results.data);
-      } catch (err) {
-        res.status(500).send('There is a Server Error, Please Try Again');
-      }
-    }
-//   });
-// }
-app.get('/crypto', getCrypto);
 
-async function getCrypto(req, res, next) {
   try {
-    let timeNow = Date.now();
+    let d = new Date();
+    let day = d.getDate();
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    let year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    let formattedTime = `${year}-${month}-${day}`
+    
     const { chosenTicker } = req.query;
-    let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/2022-12-01?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
-    console.log(url);
+    let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/${formattedTime}?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
+    
     let results = await axios.get(url);
+    let chartGroomed = new Chart(results.data, formattedTime);
+   
     res.send(results.data);
   } catch (err) {
-    next(err);
+    res.status(500).send('There is a Server Error, Please Try Again');
   }
-};
+}
+
+// app.get('/crypto', getCrypto);
+
+// async function getCrypto(req, res, next) {
+//   try {
+//     let timeNow = Date.now();
+//     const { chosenTicker } = req.query;
+//     let url = `https://api.polygon.io/v2/aggs/ticker/${chosenTicker}/range/1/hour/2022-11-30/2022-12-01?apiKey=7jGvZZJtouoVO1edP1pCYWSq4nwjZoDD`;
+//     console.log(url);
+//     let results = await axios.get(url);
+//     res.send(results.data);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 app.get('/user', getUser);
 
 async function getUser(req, res, next) {
-  try {
-    let email = req.query.email;
-    console.log(email);
-    //{ "name.last": "Hopper" }
-    // let userId = req.params.id;
-    let user = await User.find({ "email": email });
-    console.log(user);
-    res.status(200).send(user);
-  } catch (err) {
-    next(err);
-  }
-};
+  verifyUser(req, async (err, user) => {
+    if (err) {
+      console.log(err);
+      res.send('Invalid Token');
+    } else {
+      try {
+        let email = req.query.email;
+        let user = await User.find({ "email": email });
+        res.status(200).send(user);
+      } catch (err) {
+        next(err);
+      }
+    };
+  });
+}
 
 app.post('/user', postUser);
 
@@ -133,7 +131,6 @@ app.delete('/user/:id', deleteUser);
 
 async function deleteUser(req, res, next) {
   try {
-    console.log(req.params.id);
     await User.findByIdAndDelete(req.params.id);
     res.send('user deleted');
   } catch (err) {
