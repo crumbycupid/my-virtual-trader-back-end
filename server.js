@@ -7,6 +7,7 @@ const cors = require('cors');
 const verifyUser = require('./auth.js');
 const mongoose = require('mongoose');
 
+
 // // must bring in a schema is we want to interact with that model
 const User = require('./models/User.js');
 
@@ -69,6 +70,10 @@ async function getStocks(req, res) {
     }
 //   });
 // }
+app.get('/', (request, response) => {
+  response.status(200).send('Welcome!');
+});
+
 app.get('/crypto', getCrypto);
 
 async function getCrypto(req, res, next) {
@@ -153,7 +158,7 @@ class Chart {
 }
 
 app.get('*', (request, response) => {
-  response.status(404).send('Not availabe');
+  response.status(404).send('Not available');
 });
 
 
